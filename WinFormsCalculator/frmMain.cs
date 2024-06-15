@@ -1,53 +1,60 @@
+using Calculator_Controller;
+using System.Globalization;
+
 namespace WinFormsCalculator
 {
     public partial class FrmMain : Form
     {
-        private decimal _Buffer = 0;
-        private char _operation;
+        private List<string> _Buffer = [];
+        NumberOperations _numbers = new();
+        OperatorOperations Operator = new();
+        string currentValue = "0"; 
         
         public FrmMain()
         {
             InitializeComponent();
         }
 
-        private void CmdNumberButtonPressed(object sender, EventArgs e)
+        public void CmdNumberButtonPressed(object sender, EventArgs e)
         {
             var button = sender as Button;
-            if (Screen_Display.Text == "")
-            {
-                Screen_Display.Text = button.Text;
-            }
-            else
-            {
-                Screen_Display.Text += button.Text;
-            }
-        }
-
-        private void CmdClearPressed(object sender, EventArgs e)
-        {
+            string value;
+            value = _numbers.InterpetNumber(button.Text , currentValue);
+            currentValue = value;
+            UpdateDisplay(value);
 
         }
 
-        private void CmdEqualButtonPressed(object sender, EventArgs e)
+        public void UpdateDisplay(string value)
         {
-            decimal currentValue = decimal.Parse(Screen_Display.Text);
-            Screen_Display.Text = _operation switch
-            {
-                '+' => (_Buffer + currentValue).ToString(),
-                '-' => (_Buffer - currentValue).ToString(),
-                '/' => (_Buffer / currentValue).ToString(),
-                '*' => (_Buffer * currentValue).ToString(),
-            };
-            
+            Screen_Display.Text = value;
         }
 
-        private void CmdOperationButtonPressed(object sender, EventArgs e)
+        
+
+        public void CmdClearPressed(object sender, EventArgs e)
         {
-            var button = sender as Button;
-            _Buffer = decimal.Parse(Screen_Display.Text);
-            _operation = char.Parse(button.Text);
             Screen_Display.Text = "";
+            _Buffer.Clear();
+            currentValue = "0";
+        }
 
+        public void CmdEqualButtonPressed(object sender, EventArgs e)
+        {
+            string result = Operator.calculateExpression(_Buffer, currentValue);
+            UpdateDisplay(result);
+            currentValue = "0";
+        }
+
+        
+
+        public void CmdOperationButtonPressed(object sender, EventArgs e)
+        {
+            
+            var button = (sender as Button).Text;
+            _Buffer = Operator.SetOperator(_Buffer, button, currentValue);
+            UpdateDisplay("");
+            currentValue = "0";
         }
     }
 }
