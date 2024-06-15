@@ -18,25 +18,25 @@ namespace Calculator_Controller
             return buffer;
         }
 
-        private int Divide(int right, int left)
+        public int Divide(int right, int left)
         {
             if (!(left == 0))
             {
-                return right / left;  
+                return right / left;
             }
             else
             {
                 return 0;
             }
-            
+
         }
 
-        private int Multiply(int right, int left)
+        public int Multiply(int right, int left)
         {
             return right * left;
         }
 
-        private int Subtract(int right, int left)
+        public int Subtract(int right, int left)
         {
             return right - left;
         }
@@ -47,14 +47,13 @@ namespace Calculator_Controller
         }
         public string calculateExpression(List<String> _Buffer, string currentValue)
         {
-            int result = 0;
-            int rightvalue = 0;
-            int leftvalue = 0;
+            int? rightvalue = null;
+            int? leftvalue = null;
             string operatorSymbol = "";
             _Buffer.Add(currentValue);
             foreach (var item in _Buffer)
             {
-                if (Int32.TryParse(item, out int number) && rightvalue == 0)
+                if (Int32.TryParse(item, out int number) && rightvalue == null)
                 {
                     rightvalue = number;
                 }
@@ -65,8 +64,19 @@ namespace Calculator_Controller
                 else
                 {
                     operatorSymbol = item;
+                    continue;
+                }
+                if (rightvalue != null && leftvalue != null)
+                {
+                    rightvalue = SubQuerry((int)rightvalue, (int)leftvalue, operatorSymbol);
                 }
             }
+            return rightvalue.ToString();
+        }
+
+        private int SubQuerry(int rightvalue, int leftvalue, string operatorSymbol)
+        {
+            int result;
             switch (operatorSymbol)
             {
                 case ("+"):
@@ -81,8 +91,11 @@ namespace Calculator_Controller
                 case ("/"):
                     result = Divide(rightvalue, leftvalue);
                     break;
+                default:
+                    result = 0; 
+                    break;
             }
-            return result.ToString();
+            return result;
         }
     }
 }
