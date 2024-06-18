@@ -45,34 +45,69 @@ namespace Calculator_Controller
         {
             return right + left;
         }
-        public string calculateExpression(List<String> _Buffer, string currentValue)
+        public string CalculateExpression(List<String> _Buffer, string currentValue)
         {
-            int? rightvalue = null;
-            int? leftvalue = null;
-            string operatorSymbol = "";
             _Buffer.Add(currentValue);
-            foreach (var item in _Buffer)
+            List<string> _Expression = new();
+            while (_Buffer.Count() >= 3)
             {
-                if (Int32.TryParse(item, out int number) && rightvalue == null)
+                _Buffer = ExpressionSolver(_Buffer);
+            }
+            return _Buffer[0].ToString();
+        }
+
+        private List<string> ExpressionSolver(List<string> _Buffer)
+        {
+            int rightvalue = 0;
+            int leftvalue = 0;
+            string operatorSymbol = "";
+            foreach (var item in _Buffer.Select((value, index) => (value, index)))
+            {
+                if (item.value == "*" || item.value == "/")
                 {
-                    rightvalue = number;
-                }
-                else if (Int32.TryParse(item, out number))
-                {
-                    leftvalue = number;
-                }
-                else
-                {
-                    operatorSymbol = item;
-                    continue;
-                }
-                if (rightvalue != null && leftvalue != null)
-                {
+                    operatorSymbol = item.value;
+                    var item2 = _Buffer[item.index - 1];
+                    if (!Int32.TryParse(item2, out rightvalue))
+                    {
+                        throw new Exception();
+                    }
+                    var item3 = _Buffer[item.index + 1];
+                    if (!Int32.TryParse(item3, out leftvalue))
+                    {
+                        throw new Exception();
+                    }
                     rightvalue = SubQuerry((int)rightvalue, (int)leftvalue, operatorSymbol);
+                    _Buffer[item.index - 1] = rightvalue.ToString();
+                    _Buffer.Remove(leftvalue.ToString());
+                    _Buffer.Remove(item.value);
+                    return _Buffer;
                 }
             }
-            return rightvalue.ToString();
+            foreach (var item in _Buffer.Select((value, index) => (value, index)))
+            {
+                if (item.value == "+" || item.value == "-")
+                {
+                    operatorSymbol = item.value;
+                    var item2 = _Buffer[item.index - 1];
+                    if (!Int32.TryParse(item2, out rightvalue))
+                    {
+                        throw new Exception();
+                    }
+                    var item3 = _Buffer[item.index + 1];
+                    if (!Int32.TryParse(item3, out leftvalue))
+                    {
+                        throw new Exception();
+                    }
+                    rightvalue = SubQuerry((int)rightvalue, (int)leftvalue, operatorSymbol);
+                    _Buffer[item.index - 1] = rightvalue.ToString();
+                    _Buffer.Remove(leftvalue.ToString());
+                    _Buffer.Remove(item.value);
+                    return _Buffer;
+                }
+            }
+            return _Buffer;
         }
+
 
         private int SubQuerry(int rightvalue, int leftvalue, string operatorSymbol)
         {
@@ -92,7 +127,7 @@ namespace Calculator_Controller
                     result = Divide(rightvalue, leftvalue);
                     break;
                 default:
-                    result = 0; 
+                    result = 0;
                     break;
             }
             return result;

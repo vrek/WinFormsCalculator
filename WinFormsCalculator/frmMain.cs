@@ -41,7 +41,7 @@ namespace WinFormsCalculator
 
         public void CmdEqualButtonPressed(object sender, EventArgs e)
         {
-            string result = Operator.calculateExpression(_Buffer, currentValue);
+            string result = Operator.CalculateExpression(_Buffer, currentValue);
             UpdateDisplay(result);
             currentValue = "0";
         }

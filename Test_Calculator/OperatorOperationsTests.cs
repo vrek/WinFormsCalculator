@@ -45,7 +45,7 @@ namespace Calculator_Controller.Tests
             buffer.Add("2");
             buffer.Add("+");
 
-            result = ops.calculateExpression(buffer, currentValue);
+            result = ops.CalculateExpression(buffer, currentValue);
 
             Assert.AreEqual("5", result);
 
@@ -62,7 +62,7 @@ namespace Calculator_Controller.Tests
             buffer.Add("5");
             buffer.Add("+");
 
-            result = ops.calculateExpression(buffer, currentValue);
+            result = ops.CalculateExpression(buffer, currentValue);
 
             Assert.AreEqual("10", result);
 
@@ -79,7 +79,7 @@ namespace Calculator_Controller.Tests
             buffer.Add("5");
             buffer.Add("*");
 
-            result = ops.calculateExpression(buffer, currentValue);
+            result = ops.CalculateExpression(buffer, currentValue);
 
             Assert.AreEqual("17", result);
 
