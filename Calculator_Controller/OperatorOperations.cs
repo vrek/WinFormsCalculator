@@ -55,10 +55,26 @@ namespace Calculator_Controller
             }
             return _Buffer[0].ToString();
         }
-
         private List<string> ExpressionSolver(List<string> _Buffer)
         {
-            
+            foreach (var item in _Buffer.Select((value, index) => (value, index)))
+            {
+                List<string> _Expression = new();
+                if (item.value == "(")
+                {
+                    foreach (var InnerItem in _Buffer.Select((value, index) => (value, index)))
+                    {
+                        if (item.value != ")")
+                        {
+                            _Expression.Add(InnerItem.value);
+                        }
+                        else
+                        {
+                            ExpressionSolver(_Expression);
+                        }
+                    }
+                }
+            }
             foreach (var item in _Buffer.Select((value, index) => (value, index)))
             {
                 if (item.value == "*" || item.value == "/")
@@ -75,7 +91,6 @@ namespace Calculator_Controller
             }
             return _Buffer;
         }
-
         private List<string> Calculate(List<string> _Buffer, (string value, int index) item)
         {
             int rightvalue = 0;
@@ -92,35 +107,28 @@ namespace Calculator_Controller
             {
                 throw new Exception();
             }
-            rightvalue = SubQuerry((int)rightvalue, (int)leftvalue, operatorSymbol);
+            switch (operatorSymbol)
+            {
+                case ("+"):
+                    rightvalue = Sum(rightvalue, leftvalue);
+                    break;
+                case ("-"):
+                    rightvalue = Subtract(rightvalue, leftvalue);
+                    break;
+                case ("*"):
+                    rightvalue = Multiply(rightvalue, leftvalue);
+                    break;
+                case ("/"):
+                    rightvalue = Divide(rightvalue, leftvalue);
+                    break;
+                default:
+                    rightvalue = 0;
+                    break;
+            }
             _Buffer[item.index - 1] = rightvalue.ToString();
             _Buffer.Remove(leftvalue.ToString());
             _Buffer.Remove(item.value);
             return _Buffer;
-        }
-
-        private int SubQuerry(int rightvalue, int leftvalue, string operatorSymbol)
-        {
-            int result;
-            switch (operatorSymbol)
-            {
-                case ("+"):
-                    result = Sum(rightvalue, leftvalue);
-                    break;
-                case ("-"):
-                    result = Subtract(rightvalue, leftvalue);
-                    break;
-                case ("*"):
-                    result = Multiply(rightvalue, leftvalue);
-                    break;
-                case ("/"):
-                    result = Divide(rightvalue, leftvalue);
-                    break;
-                default:
-                    result = 0;
-                    break;
-            }
-            return result;
         }
     }
 }

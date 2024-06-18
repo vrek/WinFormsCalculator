@@ -45,6 +45,8 @@
             button14 = new Button();
             button15 = new Button();
             button16 = new Button();
+            button17 = new Button();
+            button18 = new Button();
             SuspendLayout();
             // 
             // Screen_Display
@@ -232,11 +234,33 @@
             button16.UseVisualStyleBackColor = true;
             button16.Click += CmdOperationButtonPressed;
             // 
+            // button17
+            // 
+            button17.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            button17.Location = new Point(339, 64);
+            button17.Name = "button17";
+            button17.Size = new Size(75, 32);
+            button17.TabIndex = 17;
+            button17.Text = "(";
+            button17.UseVisualStyleBackColor = true;
+            // 
+            // button18
+            // 
+            button18.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            button18.Location = new Point(339, 102);
+            button18.Name = "button18";
+            button18.Size = new Size(75, 32);
+            button18.TabIndex = 18;
+            button18.Text = ")";
+            button18.UseVisualStyleBackColor = true;
+            // 
             // FrmMain
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(354, 233);
+            ClientSize = new Size(422, 233);
+            Controls.Add(button18);
+            Controls.Add(button17);
             Controls.Add(button16);
             Controls.Add(button15);
             Controls.Add(button14);
@@ -279,5 +303,7 @@
         private Button button14;
         private Button button15;
         private Button button16;
+        private Button button17;
+        private Button button18;
     }
 }
