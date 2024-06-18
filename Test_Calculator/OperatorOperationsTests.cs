@@ -84,5 +84,22 @@ namespace Calculator_Controller.Tests
             Assert.AreEqual("17", result);
 
         }
+        [TestMethod()]
+        public void When_given_buffer_containing_20_and_add_and_150_and_multiply_with_3_as_currentValue_returns_17()
+        {
+            OperatorOperations ops = new OperatorOperations();
+            string result;
+            string currentValue = "3";
+            List<string> buffer = new List<string>();
+            buffer.Add("20");
+            buffer.Add("+");
+            buffer.Add("150");
+            buffer.Add("*");
+
+            result = ops.CalculateExpression(buffer, currentValue);
+
+            Assert.AreEqual("470", result);
+
+        }
     }
 }

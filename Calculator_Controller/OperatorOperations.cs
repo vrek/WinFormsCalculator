@@ -58,56 +58,46 @@ namespace Calculator_Controller
 
         private List<string> ExpressionSolver(List<string> _Buffer)
         {
-            int rightvalue = 0;
-            int leftvalue = 0;
-            string operatorSymbol = "";
+            
             foreach (var item in _Buffer.Select((value, index) => (value, index)))
             {
                 if (item.value == "*" || item.value == "/")
                 {
-                    operatorSymbol = item.value;
-                    var item2 = _Buffer[item.index - 1];
-                    if (!Int32.TryParse(item2, out rightvalue))
-                    {
-                        throw new Exception();
-                    }
-                    var item3 = _Buffer[item.index + 1];
-                    if (!Int32.TryParse(item3, out leftvalue))
-                    {
-                        throw new Exception();
-                    }
-                    rightvalue = SubQuerry((int)rightvalue, (int)leftvalue, operatorSymbol);
-                    _Buffer[item.index - 1] = rightvalue.ToString();
-                    _Buffer.Remove(leftvalue.ToString());
-                    _Buffer.Remove(item.value);
-                    return _Buffer;
+                    return Calculate(_Buffer, item);
                 }
             }
             foreach (var item in _Buffer.Select((value, index) => (value, index)))
             {
                 if (item.value == "+" || item.value == "-")
                 {
-                    operatorSymbol = item.value;
-                    var item2 = _Buffer[item.index - 1];
-                    if (!Int32.TryParse(item2, out rightvalue))
-                    {
-                        throw new Exception();
-                    }
-                    var item3 = _Buffer[item.index + 1];
-                    if (!Int32.TryParse(item3, out leftvalue))
-                    {
-                        throw new Exception();
-                    }
-                    rightvalue = SubQuerry((int)rightvalue, (int)leftvalue, operatorSymbol);
-                    _Buffer[item.index - 1] = rightvalue.ToString();
-                    _Buffer.Remove(leftvalue.ToString());
-                    _Buffer.Remove(item.value);
-                    return _Buffer;
+                    return Calculate(_Buffer, item);
                 }
             }
             return _Buffer;
         }
 
+        private List<string> Calculate(List<string> _Buffer, (string value, int index) item)
+        {
+            int rightvalue = 0;
+            int leftvalue = 0;
+            string operatorSymbol = "";
+            operatorSymbol = item.value;
+            var item2 = _Buffer[item.index - 1];
+            if (!Int32.TryParse(item2, out rightvalue))
+            {
+                throw new Exception();
+            }
+            var item3 = _Buffer[item.index + 1];
+            if (!Int32.TryParse(item3, out leftvalue))
+            {
+                throw new Exception();
+            }
+            rightvalue = SubQuerry((int)rightvalue, (int)leftvalue, operatorSymbol);
+            _Buffer[item.index - 1] = rightvalue.ToString();
+            _Buffer.Remove(leftvalue.ToString());
+            _Buffer.Remove(item.value);
+            return _Buffer;
+        }
 
         private int SubQuerry(int rightvalue, int leftvalue, string operatorSymbol)
         {
